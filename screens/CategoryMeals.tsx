@@ -1,29 +1,41 @@
 import React from 'react'
-import { Text, View, StyleSheet, Button } from 'react-native'
+import { Text, View, StyleSheet, Button, FlatList } from 'react-native'
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack'
 import { NavigationScreenComponent } from 'react-navigation'
-import { CATEGORIES } from '../data/tempData'
+import { CATEGORIES, MEALS } from '../data/tempData'
+import MealItem from '../components/MealItem'
+import Meal from '../models/Meal'
 
 const CategoryMealsScreen: NavigationScreenComponent<
   NavigationStackOptions,
   NavigationStackScreenProps
 > = ({ navigation }) => {
-  const handleGoToDetails = () => {
-    navigation.push('MealDetails')
-  }
+  const categoryId = navigation.getParam('categoryId')
 
-  const handleGoBack = () => {
-    navigation.goBack()
+  const meals = MEALS.filter(
+    (meal) => meal.categoryIds.indexOf(categoryId) >= 0,
+  )
+  const handleGoToDetails = (id: string) => {
+    navigation.navigate({
+      routeName: 'MealDetails',
+      params: {
+        mealId: id,
+      },
+    })
   }
 
   return (
     <View style={styles.screen}>
-      <Text>Category Meals screen!</Text>
-      <Button title="Go to Details " onPress={handleGoToDetails} />
-      <Button title="Go back" onPress={handleGoBack} />
+      <FlatList
+        data={meals}
+        style={{ width: '98%' }}
+        renderItem={({ item }: { item: Meal }) => (
+          <MealItem onSelect={() => handleGoToDetails(item.id)} item={item} />
+        )}
+      />
     </View>
   )
 }
