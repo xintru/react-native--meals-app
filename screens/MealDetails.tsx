@@ -1,17 +1,21 @@
 import React from 'react'
-import { Text, View, StyleSheet, Button } from 'react-native'
-import { NavigationStackScreenProps } from 'react-navigation-stack'
-import { NavigationScreenComponent } from 'react-navigation'
-import { StackNavigationOptions } from 'react-navigation-stack/lib/typescript/src/vendor/types'
-import { MEALS } from '../data/tempData'
+import { Button, StyleSheet, Text, View } from 'react-native'
+import {
+  NavigationStackOptions,
+  NavigationStackScreenComponent,
+  NavigationStackScreenProps,
+} from 'react-navigation-stack'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
+
+import { MEALS } from '../data/tempData'
 import CustomHeaderButton from '../components/HeaderButton'
 
-const MealDetailsScreen: NavigationScreenComponent<
-  StackNavigationOptions,
+const MealDetailsScreen: NavigationStackScreenComponent<
+  NavigationStackOptions,
   NavigationStackScreenProps
 > = ({ navigation }) => {
-  const mealId = navigation.getParam('mealId')
+  // @ts-ignore
+  const mealId = navigation.getParam('mealId') as string
 
   const meal = MEALS.find((meal) => meal.id === mealId)
 
@@ -29,7 +33,7 @@ const MealDetailsScreen: NavigationScreenComponent<
 
 MealDetailsScreen.navigationOptions = ({ navigation }) => {
   // @ts-ignore
-  const mealId = navigation.getParam('mealId')
+  const mealId = navigation.getParam('mealId') as string
   const meal = MEALS.find((meal) => meal.id === mealId)
   return {
     headerTitle: meal?.title || '',

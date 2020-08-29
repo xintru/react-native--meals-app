@@ -1,15 +1,17 @@
 import React from 'react'
-import { StyleSheet, FlatList } from 'react-native'
-import { NavigationStackScreenProps } from 'react-navigation-stack'
+import { FlatList, StyleSheet } from 'react-native'
+import {
+  NavigationStackOptions,
+  NavigationStackScreenComponent,
+  NavigationStackScreenProps,
+} from 'react-navigation-stack'
 
 import { CATEGORIES } from '../data/tempData'
 import Category from '../models/Category'
-import { NavigationScreenComponent } from 'react-navigation'
-import { StackNavigationOptions } from 'react-navigation-stack/lib/typescript/src/vendor/types'
 import CategoryGridTile from '../components/CategoryGridTile'
 
-const CategoriesScreen: NavigationScreenComponent<
-  StackNavigationOptions,
+const CategoriesScreen: NavigationStackScreenComponent<
+  NavigationStackOptions,
   NavigationStackScreenProps
 > = ({ navigation }) => {
   const handleGoToMeals = (id: number) => {

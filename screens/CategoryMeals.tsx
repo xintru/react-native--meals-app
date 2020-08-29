@@ -1,61 +1,35 @@
 import React from 'react'
-import { Text, View, StyleSheet, Button, FlatList } from 'react-native'
 import {
   NavigationStackOptions,
+  NavigationStackScreenComponent,
   NavigationStackScreenProps,
 } from 'react-navigation-stack'
-import { NavigationScreenComponent } from 'react-navigation'
-import { CATEGORIES, MEALS } from '../data/tempData'
-import MealItem from '../components/MealItem'
-import Meal from '../models/Meal'
 
-const CategoryMealsScreen: NavigationScreenComponent<
+import { CATEGORIES, MEALS } from '../data/tempData'
+import MealList from '../components/MealList'
+
+const CategoryMealsScreen: NavigationStackScreenComponent<
   NavigationStackOptions,
   NavigationStackScreenProps
 > = ({ navigation }) => {
-  const categoryId = navigation.getParam('categoryId')
+  // @ts-ignore
+  const categoryId = navigation.getParam('categoryId') as number
 
   const meals = MEALS.filter(
     (meal) => meal.categoryIds.indexOf(categoryId) >= 0,
   )
-  const handleGoToDetails = (id: string) => {
-    navigation.navigate({
-      routeName: 'MealDetails',
-      params: {
-        mealId: id,
-      },
-    })
-  }
 
-  return (
-    <View style={styles.screen}>
-      <FlatList
-        data={meals}
-        style={{ width: '98%' }}
-        renderItem={({ item }: { item: Meal }) => (
-          <MealItem onSelect={() => handleGoToDetails(item.id)} item={item} />
-        )}
-      />
-    </View>
-  )
+  return <MealList meals={meals} navigation={navigation} />
 }
 
 CategoryMealsScreen.navigationOptions = ({ navigation }) => {
   // @ts-ignore
-  const categoryId = navigation.getParam('categoryId')
+  const categoryId = navigation.getParam('categoryId') as number
   const category = CATEGORIES.find((c) => c.id === categoryId)
 
   return {
     headerTitle: category?.title || '',
   }
 }
-
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-})
 
 export default CategoryMealsScreen
