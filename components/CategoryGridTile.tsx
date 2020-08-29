@@ -2,12 +2,12 @@ import React from 'react'
 import {
   Platform,
   StyleSheet,
-  Text,
   TouchableNativeFeedback,
   TouchableOpacity,
   View,
 } from 'react-native'
 import Category from '../models/Category'
+import TextWrap from './TextWrap'
 
 interface CategoryGridTileProps {
   item: Category
@@ -30,9 +30,9 @@ const CategoryGridTile: React.FC<CategoryGridTileProps> = ({
         <View
           style={{ ...styles.container, ...{ backgroundColor: item.color } }}
         >
-          <Text style={styles.title} numberOfLines={2}>
+          <TextWrap style={styles.title} numberOfLines={2}>
             {item.title}
-          </Text>
+          </TextWrap>
         </View>
       </TouchableComponent>
     </View>

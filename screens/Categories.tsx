@@ -1,19 +1,14 @@
 import React from 'react'
 import { FlatList, StyleSheet } from 'react-native'
-import {
-  NavigationStackOptions,
-  NavigationStackScreenComponent,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack'
+import { NavigationStackScreenComponent } from 'react-navigation-stack'
 
 import { CATEGORIES } from '../data/tempData'
 import Category from '../models/Category'
 import CategoryGridTile from '../components/CategoryGridTile'
+import { HeaderButtons, Item } from 'react-navigation-header-buttons/index'
+import CustomHeaderButton from '../components/HeaderButton'
 
-const CategoriesScreen: NavigationStackScreenComponent<
-  NavigationStackOptions,
-  NavigationStackScreenProps
-> = ({ navigation }) => {
+const CategoriesScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const handleGoToMeals = (id: number) => {
     navigation.navigate({
       routeName: 'CategoryMeals',
@@ -36,8 +31,21 @@ const CategoriesScreen: NavigationStackScreenComponent<
     />
   )
 }
-CategoriesScreen.navigationOptions = {
-  headerTitle: 'Meal categories',
+CategoriesScreen.navigationOptions = ({ navigation }) => {
+  return {
+    headerTitle: 'Meal categories',
+    // eslint-disable-next-line react/display-name
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item
+          title="Menu"
+          iconName="ios-menu"
+          // @ts-ignore
+          onPress={() => navigation.toggleDrawer()}
+        />
+      </HeaderButtons>
+    ),
+  }
 }
 
 const styles = StyleSheet.create({

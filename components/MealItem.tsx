@@ -2,11 +2,11 @@ import React from 'react'
 import {
   ImageBackground,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native'
 import Meal from '../models/Meal'
+import TextWrap from './TextWrap'
 
 interface MealItemProps {
   item: Meal
@@ -23,15 +23,15 @@ const MealItem: React.FC<MealItemProps> = ({ item, onSelect }) => {
               source={{ uri: item.imageUrl }}
               style={styles.bgImage}
             >
-              <Text numberOfLines={1} style={styles.title}>
+              <TextWrap numberOfLines={1} style={styles.title}>
                 {item.title}
-              </Text>
+              </TextWrap>
             </ImageBackground>
           </View>
           <View style={{ ...styles.mealRow, ...styles.mealDetails }}>
-            <Text>{item.duration} minutes</Text>
-            <Text>{item.complexity.toUpperCase()}</Text>
-            <Text>{item.affordability.toUpperCase()}</Text>
+            <TextWrap>{item.duration} minutes</TextWrap>
+            <TextWrap>{item.complexity.toUpperCase()}</TextWrap>
+            <TextWrap>{item.affordability.toUpperCase()}</TextWrap>
           </View>
         </View>
       </TouchableOpacity>
