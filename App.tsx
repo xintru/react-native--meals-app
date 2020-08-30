@@ -1,11 +1,12 @@
-import { StatusBar } from 'expo-status-bar'
 import React, { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import * as Font from 'expo-font'
 import { AppLoading } from 'expo'
 import { enableScreens } from 'react-native-screens'
 
 import MealsNavigator from './navigation/MealsNavigator'
+import { Provider } from 'react-redux'
+import store from './store'
 
 enableScreens()
 
@@ -20,7 +21,9 @@ const App: React.FC = () => {
   const [fontLoaded, setFontLoaded] = useState(false)
 
   return fontLoaded ? (
-    <MealsNavigator />
+    <Provider store={store}>
+      <MealsNavigator />
+    </Provider>
   ) : (
     <AppLoading startAsync={fetchFonts} onFinish={() => setFontLoaded(true)} />
   )

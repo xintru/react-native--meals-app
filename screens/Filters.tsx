@@ -13,6 +13,9 @@ import {
 } from 'react-navigation-drawer'
 import TextWrap from '../components/TextWrap'
 import FilterSwitch from '../components/FilterSwitch'
+import { useDispatch } from 'react-redux'
+import { setFilters } from '../store/meals/meals.actions'
+import { FilterSettings } from '../store/meals/meals.types'
 
 const FiltersScreen: NavigationScreenComponent<
   NavigationStackOptions & NavigationDrawerOptions,
@@ -23,15 +26,18 @@ const FiltersScreen: NavigationScreenComponent<
   const [isVegan, setIsVegan] = useState<boolean>(false)
   const [isVegetarian, setIsVegetarian] = useState<boolean>(false)
 
+  const dispatch = useDispatch()
+
   const saveFilters = useCallback(() => {
-    const filters = {
+    const filters: FilterSettings = {
       glutenFree: isGlutenFree,
       lactoseFree: isLactoseFree,
       vegan: isVegan,
       vegetarian: isVegetarian,
     }
-    console.log(filters)
-  }, [isGlutenFree, isLactoseFree, isVegan, isVegetarian])
+
+    dispatch(setFilters(filters))
+  }, [isGlutenFree, isLactoseFree, isVegan, isVegetarian, dispatch])
 
   useEffect(() => {
     navigation.setParams({ save: saveFilters })
@@ -77,7 +83,7 @@ FiltersScreen.navigationOptions = ({ navigation }) => {
     // eslint-disable-next-line react/display-name
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-        <Item title="Save" iconName="ios-save" onPress={saveFilters()} />
+        <Item title="Save" iconName="ios-save" onPress={saveFilters} />
       </HeaderButtons>
     ),
   }

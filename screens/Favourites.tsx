@@ -6,21 +6,30 @@ import {
 import { HeaderButtons, Item } from 'react-navigation-header-buttons/index'
 
 import MealList from '../components/MealList'
-import { MEALS } from '../data/tempData'
 import CustomHeaderButton from '../components/HeaderButton'
 import { NavigationScreenComponent } from 'react-navigation'
 import {
   NavigationDrawerOptions,
   NavigationDrawerProp,
 } from 'react-navigation-drawer'
+import { useSelector } from 'react-redux'
+import { selectFavouriteMeals } from '../store/meals/meals.selectors'
+import { StyleSheet, View } from 'react-native'
+import TextWrap from '../components/TextWrap'
 
 const FavouritesScreen: NavigationScreenComponent<
   NavigationStackOptions & NavigationDrawerOptions,
   NavigationStackProp & NavigationDrawerProp
 > = ({ navigation }) => {
-  const favMeals = MEALS.filter((meal) => meal.id === 'm1' || meal.id === 'm2')
+  const favMeals = useSelector(selectFavouriteMeals)
 
-  return <MealList meals={favMeals} navigation={navigation} />
+  return favMeals.length ? (
+    <MealList meals={favMeals} navigation={navigation} />
+  ) : (
+    <View style={styles.content}>
+      <TextWrap>No favourite meals found. Start adding some!</TextWrap>
+    </View>
+  )
 }
 
 FavouritesScreen.navigationOptions = ({ navigation }) => {
@@ -38,5 +47,13 @@ FavouritesScreen.navigationOptions = ({ navigation }) => {
     ),
   }
 }
+
+const styles = StyleSheet.create({
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+})
 
 export default FavouritesScreen

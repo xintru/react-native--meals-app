@@ -1,11 +1,15 @@
-import React, { ReactNode, ReactNodeArray } from 'react'
+import React, { ReactNode, ReactNodeArray, useCallback, useEffect } from 'react'
 import { Image, ScrollView, StyleSheet, View } from 'react-native'
 import { NavigationStackScreenComponent } from 'react-navigation-stack'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
-
-import { MEALS } from '../data/tempData'
 import CustomHeaderButton from '../components/HeaderButton'
 import TextWrap from '../components/TextWrap'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  selectIfMealIsFav,
+  selectMealById,
+} from '../store/meals/meals.selectors'
+import { toggleFavourite } from '../store/meals/meals.actions'
 import Meal from '../models/Meal'
 
 const ListItem = ({
@@ -23,8 +27,23 @@ const ListItem = ({
 
 const MealDetailsScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const mealId = navigation.getParam('mealId') as string
+  const meal = useSelector(selectMealById(mealId)) as Meal
+  const isFavourite = useSelector(selectIfMealIsFav(mealId))
 
-  const meal = MEALS.find((meal) => meal.id === mealId) as Meal
+  const dispatch = useDispatch()
+
+  const toggleFavHandler = useCallback(
+    () => dispatch(toggleFavourite(mealId)),
+    [dispatch, mealId],
+  )
+
+  useEffect(() => {
+    navigation.setParams({ toggleFav: toggleFavHandler })
+  }, [toggleFavHandler])
+
+  useEffect(() => {
+    navigation.setParams({ isFavourite })
+  }, [isFavourite])
 
   return (
     <ScrollView>
@@ -49,17 +68,18 @@ const MealDetailsScreen: NavigationStackScreenComponent = ({ navigation }) => {
 }
 
 MealDetailsScreen.navigationOptions = ({ navigation }) => {
-  const mealId = navigation.getParam('mealId') as string
-  const meal = MEALS.find((meal) => meal.id === mealId)
+  const mealTitle = navigation.getParam('mealTitle') as string
+  const isFavourite = navigation.getParam('isFavourite') as boolean
+  const toggleFavourite = navigation.getParam('toggleFav')
   return {
-    headerTitle: meal?.title || '',
+    headerTitle: mealTitle,
     // eslint-disable-next-line react/display-name
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
         <Item
           title="Favourite"
-          iconName="ios-star"
-          onPress={() => console.log('starred')}
+          iconName={isFavourite ? 'ios-star' : 'ios-star-outline'}
+          onPress={toggleFavourite}
         />
       </HeaderButtons>
     ),

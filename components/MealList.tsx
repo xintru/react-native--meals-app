@@ -10,11 +10,12 @@ interface MealListProps {
 }
 
 const MealList: React.FC<MealListProps> = ({ meals, navigation }) => {
-  const handleGoToDetails = (id: string) => {
+  const handleGoToDetails = (id: string, title: string) => {
     navigation.navigate({
       routeName: 'MealDetails',
       params: {
         mealId: id,
+        mealTitle: title,
       },
     })
   }
@@ -25,7 +26,10 @@ const MealList: React.FC<MealListProps> = ({ meals, navigation }) => {
         data={meals}
         style={{ width: '98%' }}
         renderItem={({ item }: { item: Meal }) => (
-          <MealItem onSelect={() => handleGoToDetails(item.id)} item={item} />
+          <MealItem
+            onSelect={() => handleGoToDetails(item.id, item.title)}
+            item={item}
+          />
         )}
       />
     </View>
